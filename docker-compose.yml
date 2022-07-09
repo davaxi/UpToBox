@@ -1,0 +1,58 @@
+version: '3'
+
+services:
+  python:
+    networks:
+      - default
+    container_name: python.uptobox-publisher
+    build:
+      dockerfile: Dockerfile
+      context: .
+    working_dir: /app
+    entrypoint:
+      - python
+    volumes:
+      - .:/app
+      - .cache:/root/.cache
+    env_file:
+      - .env-local
+
+  npm:
+    networks:
+      - default
+    container_name: npm.uptobox-publisher
+    build:
+      dockerfile: Dockerfile
+      context: .
+    working_dir: /app
+    entrypoint:
+      - npm
+    volumes:
+      - .:/app
+      - .cache:/root/.cache
+    env_file:
+      - .env-local
+
+  serverless:
+    networks:
+      - default
+    container_name: serveless.uptobox-publisher
+    build:
+      dockerfile: Dockerfile
+      context: .
+    working_dir: /app
+    entrypoint:
+      - ./node_modules/.bin/serverless
+    volumes:
+      - .:/app
+      - .cache:/root/.cache
+    env_file:
+      - .env-local
+    environment:
+      - SIMULATOR_VERSION=0.0.0
+
+networks:
+  default:
+    driver: bridge
+  traefik:
+    name: traefik_proxy

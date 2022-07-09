@@ -1,0 +1,18 @@
+DROP TABLE IF EXISTS uptobox_link;
+CREATE TABLE uptobox_link (
+    id INT PRIMARY KEY NOT NULL AUTO_INCREMENT,
+    created DATETIME NOT NULL DEFAULT now(),
+    version DATETIME NOT NULL DEFAULT now(),
+    enabled BOOLEAN NOT NULL DEFAULT TRUE,
+
+    `date` DATETIME NOT NULL DEFAULT NOW(),
+
+    token VARCHAR(12) NOT NULL,
+    title VARCHAR(255) NOT NULL,
+
+    count INTEGER NOT NULL DEFAULT 1
+);
+
+ALTER TABLE uptobox_link ADD CONSTRAINT UNIQUE (token);
+ALTER TABLE uptobox_link ADD INDEX (token);
+ALTER TABLE uptobox_link ADD FULLTEXT(title);

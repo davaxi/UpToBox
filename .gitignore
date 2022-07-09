@@ -1,0 +1,8 @@
+.env-*
+.serverless/
+.cache/
+.tmp/
+node_modules/
+package/
+report.xml
+__pycache__
