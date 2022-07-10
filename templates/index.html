@@ -1,0 +1,330 @@
+<!doctype html>
+<html lang="fr">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>UpToBox - Publisher</title>
+        <meta name="robots" content="noindex" />
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor" crossorigin="anonymous">
+        <style>
+            .b-example-divider {
+                height: 3rem;
+                background-color: rgba(0, 0, 0, .1);
+                border: solid rgba(0, 0, 0, .15);
+                border-width: 1px 0;
+                box-shadow: inset 0 .5em 1.5em rgba(0, 0, 0, .1), inset 0 .125em .5em rgba(0, 0, 0, .15);
+            }
+            .table {
+                text-align: left;
+            }
+        </style>
+    </head>
+    <body>
+        <main>
+            <div class="px-4 py-5 my-5 text-center">
+                <h1 class="display-5 fw-bold">UpToBox - Publisher</h1>
+                <div class="col-lg-6 mx-auto">
+                    <p class="lead mb-4">Partagez à la communauté vos liens de vos fichiers UpToBox</p>
+                    <div id="post-result">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th scope="col" width="10"></th>
+                                    <th scope="col">#</th>
+                                    <th scope="col"></th>
+                                    <th scope="col" >Nom</th>
+                                    <th scope="col" >Taille</th>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                        Patientez que tous les liens soient partagés...
+                    </div>
+
+                    <form id="post-form" action="get">
+                        <textarea id="links" name="links" rows="5" class="form-control" placeholder="Copiez vos liens UpToBox"></textarea>
+                        <button type="submit" class="btn btn-lg btn-primary mt-3">Partager les liens</button>
+                    </form>
+                </div>
+            </div>
+            <div class="b-example-divider"></div>
+            <div class="container container-fluid">
+                <div class="m-3 text-justify">
+                    <p>Les liens restent tant qu'ils sont <span class="text-danger fw-bold text-decoration-underline">chauds</span>. Dès le moment où un lien arrive à <span class="text-primary fw-bold">0°</span> celui-ci est automatiquement supprimé de la base. Lors du partage d'un lien, celui-ci démarre à <span class="text-danger fw-bold">168 °</span> si le lien n'est pas connu, sinon le lien déjà enregistré augment de <span class="text-danger fw-bold">24°</span>. Toutes les heures un lien perd <span class="text-primary fw-bold">1°</span> jusqu'à ce qu'il soit complètement <span class="text-primary fw-bold text-decoration-underline">froid</span> et soit donc supprimé. Vous pouvez à tout moment, <span class="text-primary fw-bold">refroidir</span> ou <span class="text-danger fw-bold">réchauffer</span> un lien de <strong>2 °</strong>.</p>
+                    <p>Il n'y a <span class="text-decoration-underline fw-bold">aucun</span> système de cookie sur le site, ni de Google Analytics ou tout autre système de tracking utilisateur. De même, il n'y a ni publicité ou ni lien d'affiliation. Ils sont donc automatiquement supprimés des URLs qui sont partagés.</p>
+                </div>
+            </div>
+            <div class="b-example-divider"></div>
+            <div class="container container-fluid">
+                <div class="mt-3">
+                    <form id="search-form" method="get">
+                        <input type="hidden" name="sort" value="id" />
+                        <input type="hidden" name="order" value="desc" />
+                        <div class="input-group mb-3">
+                            <input name="q" type="text" class="form-control" placeholder="Chercher un fichier..." />
+                            <button class="btn btn-outline-secondary" type="submit" id="button-addon2">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
+                                    <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z"/>
+                                </svg>
+                            </button>
+                        </div>
+                    </form>
+                    <table class="table align-middle" id="search-result">
+                        <thead>
+                        <tr>
+                            <th scope="col" >Nom</th>
+                            <th scope="col" >Taille</th>
+                            <th scope="col"></th>
+                        </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+            </div>
+        </main>
+
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" integrity="sha512-894YE6QWD5I59HgZOGReFYm4dnWc1Qt5NtvYSaNcOP+u1T9qYdvdihz0PPSiiqn/+/3e7Jo4EaG7TubfWGUrMQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+        <script type="text/javascript">
+            // https://stackoverflow.com/questions/10420352/converting-file-size-in-bytes-to-human-readable-string
+            function humanFileSize(bytes, si=false, dp=1) {
+              const thresh = si ? 1000 : 1024;
+
+              if (Math.abs(bytes) < thresh) {
+                return bytes + ' B';
+              }
+
+              const units = si
+                ? ['kB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB']
+                : ['KiB', 'MiB', 'GiB', 'TiB', 'PiB', 'EiB', 'ZiB', 'YiB'];
+              let u = -1;
+              const r = 10**dp;
+
+              do {
+                bytes /= thresh;
+                ++u;
+              } while (Math.round(Math.abs(bytes) * r) / r >= thresh && u < units.length - 1);
+
+              return bytes.toFixed(dp) + ' ' + units[u];
+            }
+            // https://stackoverflow.com/questions/6974614/how-to-convert-human-readable-memory-size-into-bytes
+            function unhumanize(text) {
+                var powers = {'k': 1, 'm': 2, 'g': 3, 't': 4};
+                var regex = /(\d+(?:\.\d+)?)\s?(k|m|g|t)?b?/i;
+
+                var res = regex.exec(text);
+
+                return parseInt(res[1] * Math.pow(1024, powers[res[2].toLowerCase()]));
+            }
+
+            function getUpToBoxToken(url) {
+                var el = document.createElement('a');
+                el.href = url;
+                return el.pathname.substring(1)
+            }
+            function getUpToBoxData(token, content) {
+                var data = {'token': token, 'title': '', size: 0},
+                    titleRegex = /<title>([^<]+)<\/title>/gm,
+                    sizeRegex = /<h1 class='file-title'>.* \(([^\)]+)\)<\/h1>/gm,
+                    matchTitle = titleRegex.exec(content),
+                    sizeMatch = sizeRegex.exec(content);
+
+                if (!matchTitle.length || !sizeMatch.length) {
+                    return data
+                }
+
+                data['title'] = matchTitle[1];
+                data['size'] = unhumanize(sizeMatch[1]);
+                return data;
+            }
+
+            $(document).ready(
+                function() {
+                    var $resultTable = $('#search-result'),
+                        $resultTableBody = $resultTable.find('tbody'),
+                        $postForm = $('#post-form'),
+                        $postResult = $('#post-result'),
+                        $postResultTableBody = $postResult.find('table tbody'),
+                        $links = $('#links'),
+                        crawlingLink = 0,
+                        goodImportIcon = '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-bookmark-check-fill" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M2 15.5V2a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v13.5a.5.5 0 0 1-.74.439L8 13.069l-5.26 2.87A.5.5 0 0 1 2 15.5zm8.854-9.646a.5.5 0 0 0-.708-.708L7.5 7.793 6.354 6.646a.5.5 0 1 0-.708.708l1.5 1.5a.5.5 0 0 0 .708 0l3-3z"/></svg>',
+                        badImportIcon = '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-bookmark-x" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M6.146 5.146a.5.5 0 0 1 .708 0L8 6.293l1.146-1.147a.5.5 0 1 1 .708.708L8.707 7l1.147 1.146a.5.5 0 0 1-.708.708L8 7.707 6.854 8.854a.5.5 0 1 1-.708-.708L7.293 7 6.146 5.854a.5.5 0 0 1 0-.708z"/><path d="M2 2a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v13.5a.5.5 0 0 1-.777.416L8 13.101l-5.223 2.815A.5.5 0 0 1 2 15.5V2zm2-1a1 1 0 0 0-1 1v12.566l4.723-2.482a.5.5 0 0 1 .554 0L13 14.566V2a1 1 0 0 0-1-1H4z"/></svg>',
+                        submitLink = function($this, data) {
+                            $.ajax({
+                                url: '/add',
+                                method: 'POST',
+                                data: JSON.stringify(data),
+                                processData: false,
+                                contentType: 'application/json',
+                                dataType: 'JSON',
+                                headers: {
+                                    'Authorization': 'Bearer {{ token }}',
+                                },
+                                success: function(response) {
+                                    if (response['status'] === 'unauthorized') {
+                                        window.location.reload();
+                                        return;
+                                    }
+                                    $this
+                                        .addClass('table-success')
+                                        .find('td:first').html(goodImportIcon).end()
+                                        .find('td.item-name').text(data['title']).end()
+                                        .find('td.item-size').text(humanFileSize(data['size'])).end()
+                                }
+                            })
+                        },
+                        crawlLink = function($this, link) {
+                            crawlingLink++;
+
+                            var token = getUpToBoxToken(link);
+                            $.ajax({
+                                method: 'POST',
+                                processData: false,
+                                url: 'https://uptobox.com/' + token,
+                                success: function(response) {
+                                    var data = getUpToBoxData(token, response);
+                                    if (!data['size']) {
+                                        $this.addClass('table-danger').find('td:first').html(badImportIcon);
+                                        return;
+                                    }
+                                    submitLink($this, data)
+                                },
+                                error: function() {
+                                    $this.addClass('table-danger').find('td:first').html(badImportIcon);
+                                },
+                                complete: function() {
+                                    crawlingLink--;
+                                }
+                            })
+                        },
+                        updateTemperature = function(event, $this, action) {
+                            var $tr = $this.closest('tr');
+
+                            $tr.find('button').attr('disabled', 'disabled');
+
+                            event.preventDefault();
+
+                            $.ajax({
+                                url: '/like',
+                                method: 'POST',
+                                data: JSON.stringify({'id': parseInt($tr.data('link-id')), 'action': action}),
+                                processData: false,
+                                contentType: 'application/json',
+                                dataType: 'JSON',
+                                headers: {
+                                    'Authorization': 'Bearer {{ token }}',
+                                },
+                                success: function(response) {
+                                    if (response['status'] === 'unauthorized') {
+                                        window.location.reload();
+                                        return;
+                                    }
+                                    if (response['status'] !== 'ok') {
+                                        return;
+                                    }
+                                    $tr.find('.link-temperature').text(response['temperature'] + ' °');
+                                }
+                            })
+                        }
+
+                    $postResult.hide();
+                    $postForm.on('submit', function(event) {
+                        event.preventDefault();
+
+                        var lines = $links.val().split("\n").filter(n => n.trim())
+                        if (!lines.length) {
+                            return
+                        }
+                        $postForm.hide();
+                        $postResult.show();
+                        $postResultTableBody.empty();
+                        $links.val('');
+
+                        $.each(lines, function(index, line) {
+                            var $item = $('<tr />');
+                            $item.append('<td><div class="spinner-border spinner-border-sm" role="status"><span class="visually-hidden">Loading...</span></div></td>');
+                            $item.append('<th scope="row">' + index + '</th>');
+                            $item.append($('<td/>').text(line));
+                            $item.append('<td style="max-width: 100px" class="text-truncate item-name"></td>');
+                            $item.append('<td class="item-size"></td>');
+                            $postResultTableBody.append($item)
+                            crawlLink($item, line);
+                        })
+                        var interval = setInterval(function() {
+                            if (crawlingLink > 0) {
+                                return;
+                            }
+                            $postForm.show()
+                            $postResult.hide();
+                            clearInterval(interval);
+                        }, 2000)
+                    })
+
+                    $resultTable
+                        .on('click', '.btn-link-up', function(event) {
+                            updateTemperature(event, $(this), 'up');
+                        })
+                        .on('click', '.btn-link-down', function(event) {
+                            updateTemperature(event, $(this), 'down');
+                        })
+                    $('#search-form').on('submit', function(event) {
+                        event.preventDefault();
+
+                        var $form = $(this);
+
+                        $.ajax({
+                            url: '/search',
+                            method: 'GET',
+                            data: $form.serialize(),
+                            headers: {
+                                'Authorization': 'Bearer {{ token }}',
+                            },
+                            success: function(response) {
+                                if (response['status'] === 'unauthorized') {
+                                    window.location.reload();
+                                    return;
+                                }
+
+                                $resultTableBody.empty();
+                                $.each(response['items'], function(index, item) {
+                                    var temperatureClass = '';
+                                    if (item['temperature'] < 24) {
+                                        temperatureClass = 'text-primary';
+                                    } else if (item['temperature'] > 200) {
+                                        temperatureClass = 'text-danger'
+                                    }
+
+                                    var name = $('<td />')
+                                        .append(
+                                            $('<div class="text-truncate" />').text(item['title']).attr('title', item['title'])
+                                        )
+                                        .append('<small><a href="'+ item['link']+'" target="_blank">' + item['link'] + '</a></small>');
+
+
+                                    var $item = $('<tr data-link-id="' + item['id'] + '" />');
+                                    $item.append(name)
+                                    $item.append($('<td>').text(humanFileSize(item['size'])))
+                                    $item.append('<td style="text-align: right">' +
+                                        '<div class="btn-group" role="group" aria-label="Basic mixed styles example">' +
+                                            '<button type="button" class="btn btn-sm text-primary btn-link-down">' +
+                                                '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-dash-lg" viewBox="0 0 16 16">' +
+                                                    '<path fill-rule="evenodd" d="M2 8a.5.5 0 0 1 .5-.5h11a.5.5 0 0 1 0 1h-11A.5.5 0 0 1 2 8Z"/>' +
+                                                '</svg>' +
+                                            '</button>' +
+                                            '<div class="btn btn-sm disabled font-bold link-temperature '+ temperatureClass + '">' + item['temperature'] + ' °</div>' +
+                                            '<button type="button" class="btn btn-sm text-danger btn-link-up">' +
+                                                '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-plus-lg" viewBox="0 0 16 16">' +
+                                                    '<path fill-rule="evenodd" d="M8 2a.5.5 0 0 1 .5.5v5h5a.5.5 0 0 1 0 1h-5v5a.5.5 0 0 1-1 0v-5h-5a.5.5 0 0 1 0-1h5v-5A.5.5 0 0 1 8 2Z"/>' +
+                                                '</svg>' +
+                                            '</button>' +
+                                        '</div>' +
+                                    '</td>')
+                                    $resultTableBody.append($item);
+                                });
+                            }
+                        })
+                    }).trigger('submit');
+                }
+            )
+        </script>
+    </body>
+</html>
