@@ -23,7 +23,7 @@ def compute_response(request_event, response_code, response_body=None):
         headers['Access-Control-Allow-Origin'] = '*'
         headers['Access-Control-Allow-Credentials'] = 'true'
         headers['Access-Control-Allow-Methods'] = 'GET, POST, OPTIONS'
-        headers['Access-Control-Allow-Headers'] = 'authorization'
+        headers['Access-Control-Allow-Headers'] = 'authorization, x-requested-with'
         headers['Access-Control-Max-Age'] = '86400'
 
     return {
