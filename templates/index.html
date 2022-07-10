@@ -129,7 +129,7 @@
                     matchTitle = titleRegex.exec(content),
                     sizeMatch = sizeRegex.exec(content);
 
-                if (!matchTitle.length || !sizeMatch.length) {
+                if (!matchTitle || !matchTitle.length || !sizeMatch || !sizeMatch.length) {
                     return data
                 }
 
