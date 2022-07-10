@@ -12,7 +12,12 @@ app = Flask(__name__)
 @app.route("/", methods=['GET'])
 def index():
     data = {'ping': 'pong'}
-    return render_template('index.html', token=tools.security.jwt_encode(data))
+
+    cursor = connection.get_cursor()
+    cursor.execute('SELECT COUNT(*) as count FROM uptobox_link WHERE enabled = true AND expiration_date >= now()')
+    row = cursor.fetchone()
+
+    return render_template('index.html', token=tools.security.jwt_encode(data), count=row['count'])
 
 
 @app.route("/like", methods=['POST'])
@@ -116,11 +121,11 @@ def search():
             'SELECT id, token, title, size, expiration_date '
             'FROM uptobox_link '
             'WHERE enabled = true '
-            'AND ( similarity(title, %s) > 0 OR vector @@ websearch_to_tsquery(\'french\', %s)) '
+            'AND vector @@ websearch_to_tsquery(\'french\', %s) '
             'AND expiration_date >= NOW() '
             f'ORDER BY {sort} {order} '
             f'LIMIT 100',
-            (query, query, )
+            (query, )
         )
 
     items = []
@@ -139,4 +144,4 @@ def search():
 
 if __name__ == "__main__":
     port = int(os.environ.get('FLASK_PORT', 5000))
-    app.run(debug=True, host='0.0.0.0', port=port)
+    app.run(debug=False, host='0.0.0.0', port=port)

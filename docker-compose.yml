@@ -42,10 +42,6 @@ services:
     build:
       dockerfile: Dockerfile
       context: .
-    working_dir: /app
-    entrypoint:
-      - python
-      - handler.py
     volumes:
       - .:/app
     env_file:
@@ -56,12 +52,6 @@ services:
       - traefik.http.routers.web_uptobox_publisher.tls=true
       - traefik.http.routers.web_uptobox_publisher.tls.certResolver=patiashvili
       - traefik.http.routers.web_uptobox_publisher.rule=Host(`uptobox.patiashvili`)
-      - traefik.http.routers.web_uptobox_publisher_onion.rule=Host(`mee5vfawaw3gkzasod6ipghud27qzfi3sjxofy6mnvvprmg2bnv5qsad.onion`)
-      - traefik.http.routers.web_uptobox_publisher_onion.tls=false
-      - traefik.http.middlewares.tor_headers.headers.customresponseheaders.Onion-Location=`mee5vfawaw3gkzasod6ipghud27qzfi3sjxofy6mnvvprmg2bnv5qsad.onion`
-      - traefik.http.routers.web_uptobox_publisher_onion.middlewares=tor_headers
-
-
 
 
 volumes:

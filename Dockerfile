@@ -1,12 +1,21 @@
-FROM python:3.10-alpine3.16
+FROM python:3.10-slim
 
 COPY Pipfile .
 COPY Pipfile.lock .
 COPY requirements.txt .
 
-RUN apk add --update --no-cache python3 postgresql-dev gcc musl-dev linux-headers g++ python3-dev   \
-    && ln -sf python3 /usr/bin/python \
+RUN apt-get update \
+    && apt-get -y install libpq-dev gcc \
     && python3 -m ensurepip \
     && pip3 install --no-cache --upgrade pip setuptools \
     && pip install pipenv unittest-xml-reporting \
     && pipenv install --system
+
+COPY handler.py /app/handler.py
+COPY tools /app/tools
+COPY templates /app/templates
+COPY entrypoint.sh /app/entrypoint.sh
+
+WORKDIR /app/
+ENTRYPOINT ["./entrypoint.sh"]
+EXPOSE 5000
