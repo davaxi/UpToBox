@@ -1,5 +1,6 @@
 import os
 import tools
+import string
 from datetime import datetime
 from flask import Flask, render_template, request
 
@@ -17,17 +18,20 @@ def index():
     cursor.execute('SELECT COUNT(*) as count, SUM(size) as total FROM uptobox_link WHERE enabled = true')
     row = cursor.fetchone()
 
-    archiveSize = 0
+    letters = [letter for letter in string.ascii_uppercase]
+
+    archive_size = 0
     if os.path.isfile(tools.constant.ARCHIVE_PATH):
         stats = os.stat(tools.constant.ARCHIVE_PATH)
-        archiveSize = stats.st_size
+        archive_size = stats.st_size
 
     return render_template(
         'index.html',
         token=tools.security.jwt_encode(data),
         count=row['count'],
         totalSize=row['total'],
-        archiveSize=archiveSize
+        archiveSize=archive_size,
+        letters=letters,
     )
 
 
@@ -107,33 +111,36 @@ def search():
     if data is None:
         return {"status": "unauthorized"}
 
+    start_withs = [letter for letter in string.ascii_uppercase]
+    start_withs.append('number')
+
     query = request.args.get('q', '')
     sort = request.args.get('sort', '')
     order = request.args.get('order', '')
-    if sort not in ['id', 'title', 'size']:
+    start_with = request.args.get('start-with')
+    if sort not in ['id', 'title', 'size', 'like_count']:
         sort = 'id'
     if order not in ['asc', 'desc']:
         order = 'desc'
+    if start_with not in start_withs:
+        start_with = ''
+
+    params = ()
+    sql = 'SELECT id, token, title, size, like_count FROM uptobox_link WHERE enabled = true'
+    if query:
+        sql = f'{sql} AND vector @@ websearch_to_tsquery(\'french\', %s)'
+        params = params + (query, )
+    if start_with:
+        sql = f'{sql} AND SUBSTR(title, 1, 1) =ANY(%s)'
+        if start_with == 'number':
+            params = params + ([digit for digit in string.digits], )
+        else:
+            params = params + ([start_with.lower(), start_with.upper()], )
+
+    sql = f'{sql} ORDER BY {sort} {order} LIMIT 100'
 
     cursor = connection.get_cursor()
-    if not query:
-        cursor.execute(
-            'SELECT id, token, title, size, like_count '
-            'FROM uptobox_link '
-            'WHERE enabled = true '
-            f'ORDER BY {sort} {order} '
-            'LIMIT 100'
-        )
-    else:
-        cursor.execute(
-            'SELECT id, token, title, size, like_count '
-            'FROM uptobox_link '
-            'WHERE enabled = true '
-            'AND vector @@ websearch_to_tsquery(\'french\', %s) '
-            f'ORDER BY {sort} {order} '
-            f'LIMIT 100',
-            (query, )
-        )
+    cursor.execute(sql, params)
 
     items = []
     for item in cursor.fetchall():

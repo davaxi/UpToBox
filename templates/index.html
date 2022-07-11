@@ -42,7 +42,7 @@
                     </div>
 
                     <form id="post-form" action="get">
-                        <textarea id="links" name="links" rows="5" class="form-control" placeholder="Copiez vos liens UpToBox"></textarea>
+                        <textarea id="links" name="links" rows="5" class="form-control" placeholder="Copiez vos liens UpToBox (max. 500 lien)"></textarea>
                         <button type="submit" class="btn btn-lg btn-primary mt-3">Partager les liens</button>
                     </form>
                 </div>
@@ -50,7 +50,12 @@
             <div class="b-example-divider"></div>
             <div class="container container-fluid">
                 <div class="m-3 text-justify">
-                    <p>Il n'y a <span class="text-decoration-underline fw-bold">aucun</span> système de cookie sur le site, ni de Google Analytics ou tout autre système de tracking utilisateur. De même, il n'y a ni publicité ou ni lien d'affiliation. Ils sont donc automatiquement supprimés des URLs qui sont partagés.</p>
+                    <h3>Conditions générales d'utilisation</h3>
+                    <p>Cette page permet uniquement de partager des liens uptobox, il n'héberge <span class="text-decoration-underline fw-bold">aucun fichier.</span></p>
+                    <p>Les liens vers de la pornographie, nudité, image à caractère sexuelle ou n'importe quel type d'image ou de vidéo à caractère offensif sont interdites. Le matériel soumis à un droit d'auteur est également strictement interdit. Nous nous réservons le droit de décider de la qualification d'un contenu, approprié ou non, et de supprimer un lien quel qu'il soit sans aucune notification.</p>
+                    <p>L'utilisateur accepte de se soumettre à toutes les lois appliquées à sa localisation, notamment les lois relatives aux droits d'auteur et aux marques déposées. Les liens d'images, vidéos et fichiers violant un droit d'auteur ou une marque déposée sont prohibées. Si un tier dépose une réclamation d'infraction envers un lien, il sera supprimer. Si un conflit émerge entre plusieurs tiers sur notre service, on se réserve le droit de ne pas intervenir.</p>
+                    <p>Nous nous engageons à coopérer avec n'importe quelle autorité compétente si une investigation devrait survenir.</p>
+                    <p>Il n'y a <span class="text-decoration-underline fw-bold">aucun</span> système de cookie sur le site, ni de Google Analytics ou tout autre système de tracking utilisateur. De même, il n'y a ni publicité ou ni lien d'affiliation. Ils sont donc automatiquement supprimés des URLs qui sont partagés. L'ensemble des liens est téléchargeable à tout moment par tout utilisateur.</p>
                 </div>
             </div>
             <div class="b-example-divider"></div>
@@ -61,8 +66,7 @@
                         <a class="btn btn-sm btn-primary mb-3" target="_blank" href="/archive.csv">Télécharger tous les liens (<span id="archiveSize"></span>)</a>
                     </div>
                     <form id="search-form" method="get">
-                        <input type="hidden" name="sort" value="id" />
-                        <input type="hidden" name="order" value="desc" />
+                        <input type="hidden" name="start-with" value="" id="start-with" />
                         <div class="input-group mb-3">
                             <input id="search-query" name="q" type="text" class="form-control" placeholder="Chercher un fichier..." />
                             <button class="btn btn-outline-secondary" type="submit" id="button-addon2">
@@ -70,6 +74,39 @@
                                     <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z"/>
                                 </svg>
                             </button>
+                        </div>
+                        <div class="row">
+                            <div class="col">
+                                <div class="input-group mb-3">
+                                    <label class="input-group-text" for="sort">Trier par</label>
+                                    <select class="form-select" id="sort" name="sort">
+                                        <option selected="selected" value="id">Date d'ajout du lien</option>
+                                        <option value="title">Nom du fichier</option>
+                                        <option value="size">Taille de fichier</option>
+                                        <option value="like_count">Nombre de like</option>
+                                    </select>
+                                    <select class="form-select" id="sort" name="order">
+                                        <option selected="selected" value="desc">Décroissant</option>
+                                        <option value="asc">Croissant</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col">
+                                <div class="btn-group">
+                                    <label class="input-group-text" for="sort">Titre commençant par</label>
+                                    <button type="button" data-start-with="" class="btn btn-secondary btn-start-with">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-x" viewBox="0 0 16 16">
+                                            <path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z"/>
+                                        </svg>
+                                    </button>
+                                    {% for letter in letters %}
+                                        <button type="button" data-start-with="{{ letter }}" class="btn btn-outline-secondary btn-start-with">{{ letter }}</button>
+                                    {% endfor %}
+                                    <button type="button" data-start-with="number" class="btn btn-outline-secondary btn-start-with">0 - 9</button>
+                                </div>
+                            </div>
                         </div>
                     </form>
                     <table class="table align-middle" id="search-result">
@@ -145,11 +182,13 @@
                     var $resultTable = $('#search-result'),
                         $resultTableBody = $resultTable.find('tbody'),
                         $searchForm = $('#search-form'),
+                        $inputStartWith = $('#start-with'),
                         $searchQuery = $('#search-query'),
                         $postForm = $('#post-form'),
                         $postResult = $('#post-result'),
                         $postResultTableBody = $postResult.find('table tbody'),
                         $links = $('#links'),
+                        $btnStartWith = $('.btn-start-with'),
                         crawlingLink = 0,
                         goodImportIcon = '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-bookmark-check-fill" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M2 15.5V2a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v13.5a.5.5 0 0 1-.74.439L8 13.069l-5.26 2.87A.5.5 0 0 1 2 15.5zm8.854-9.646a.5.5 0 0 0-.708-.708L7.5 7.793 6.354 6.646a.5.5 0 1 0-.708.708l1.5 1.5a.5.5 0 0 0 .708 0l3-3z"/></svg>',
                         badImportIcon = '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-bookmark-x" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M6.146 5.146a.5.5 0 0 1 .708 0L8 6.293l1.146-1.147a.5.5 0 1 1 .708.708L8.707 7l1.147 1.146a.5.5 0 0 1-.708.708L8 7.707 6.854 8.854a.5.5 0 1 1-.708-.708L7.293 7 6.146 5.854a.5.5 0 0 1 0-.708z"/><path d="M2 2a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v13.5a.5.5 0 0 1-.777.416L8 13.101l-5.223 2.815A.5.5 0 0 1 2 15.5V2zm2-1a1 1 0 0 0-1 1v12.566l4.723-2.482a.5.5 0 0 1 .554 0L13 14.566V2a1 1 0 0 0-1-1H4z"/></svg>',
@@ -178,8 +217,6 @@
                             })
                         },
                         crawlLink = function($this, link) {
-                            crawlingLink++;
-
                             var token = getUpToBoxToken(link);
                             $.ajax({
                                 method: 'POST',
@@ -252,7 +289,14 @@
                             $item.append('<td style="max-width: 100px" class="text-truncate item-name"></td>');
                             $item.append('<td class="item-size"></td>');
                             $postResultTableBody.append($item)
-                            crawlLink($item, line);
+
+                            crawlingLink++;
+                            setTimeout(
+                                function() {
+                                    crawlLink($item, line);
+                                },
+                                index * 2000
+                            )
                         })
                         var interval = setInterval(function() {
                             if (crawlingLink > 0) {
@@ -273,7 +317,8 @@
                         })
                         .on('click', '.btn-link-down', function(event) {
                             updateTemperature(event, $(this), 'down');
-                        })
+                        });
+
                     $searchForm.on('submit', function(event) {
                         event.preventDefault();
 
@@ -327,8 +372,20 @@
                                     $resultTableBody.append($item);
                                 });
                             }
-                        })
+                        });
                     }).trigger('submit');
+
+                    $btnStartWith.on('click', function(event) {
+                        var $this = $(this),
+                            startWith = $this.data('start-with');
+
+                        event.preventDefault();
+
+                        $btnStartWith.removeClass('btn-secondary').addClass('btn-outline-secondary');
+                        $this.removeClass('btn-outline-secondary').addClass('btn-secondary');
+                        $inputStartWith.val(startWith);
+                        $searchForm.trigger('submit');
+                    });
 
                     $('#totalSize').html(humanFileSize({{ totalSize }} * 1000));
                     $('#archiveSize').html(humanFileSize({{ archiveSize }}));
