@@ -17,7 +17,18 @@ def index():
     cursor.execute('SELECT COUNT(*) as count, SUM(size) as total FROM uptobox_link WHERE enabled = true')
     row = cursor.fetchone()
 
-    return render_template('index.html', token=tools.security.jwt_encode(data), count=row['count'], totalSize=row['total'])
+    archiveSize = 0
+    if os.path.isfile(tools.constant.ARCHIVE_PATH):
+        stats = os.stat(tools.constant.ARCHIVE_PATH)
+        archiveSize = stats.st_size
+
+    return render_template(
+        'index.html',
+        token=tools.security.jwt_encode(data),
+        count=row['count'],
+        totalSize=row['total'],
+        archiveSize=archiveSize
+    )
 
 
 @app.route("/like", methods=['POST'])
