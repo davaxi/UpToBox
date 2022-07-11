@@ -12,6 +12,5 @@ STATUS_CODE_NOT_IMPLEMENTED = 501
 
 UPTOBOX_TOKEN_LEN = 12
 
-ALLOWED_CORS_DOMAINS = [
-    'https://mon.astrocenter.fr',
-]
+ARCHIVE_FOLDER = '/app/data'
+ARCHIVE_PATH = '{dir}/archive.csv'.format(dir=ARCHIVE_FOLDER)

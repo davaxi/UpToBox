@@ -6,3 +6,4 @@ node_modules/
 package/
 report.xml
 __pycache__
+data/
