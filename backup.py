@@ -14,7 +14,7 @@ cursor.execute(
     '   id as id, '
     '   \'https://uptobox.com/\' || token as link, '
     '   title as title, '
-    '   1000 * size as size, '
+    '   size as size, '
     '   like_count as like_count '
     'FROM uptobox_link '
     'WHERE enabled = true AND exported = false ORDER BY id')
@@ -27,6 +27,7 @@ with open(tools.ARCHIVE_PATH, 'a', encoding='UTF8') as file:
     writer = csv.DictWriter(file, fieldnames=fieldnames)
     writer.writeheader()
     for row in rows:
+        row['size'] = row['size'] * 1000
         writer.writerow(row)
         ids.append(row['id'])
 
