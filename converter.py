@@ -9,6 +9,9 @@ def unhumaize(text):
     powers = {'k': 1, 'm': 2, 'g': 3, 't': 4}
 
     res = re.match(r'(\d+(?:\.\d+)?)\s?(k|m|g|t)?b?', text, re.IGNORECASE)
+    if res[2] is None:
+        return int(res[1])
+
     return int(float(res[1]) * math.pow(1024, powers[str(res[2]).lower()]))
 
 
