@@ -14,10 +14,10 @@ def index():
     data = {'ping': 'pong'}
 
     cursor = connection.get_cursor()
-    cursor.execute('SELECT COUNT(*) as count FROM uptobox_link WHERE enabled = true')
+    cursor.execute('SELECT COUNT(*) as count, SUM(size) as total FROM uptobox_link WHERE enabled = true')
     row = cursor.fetchone()
 
-    return render_template('index.html', token=tools.security.jwt_encode(data), count=row['count'])
+    return render_template('index.html', token=tools.security.jwt_encode(data), count=row['count'], totalSize=row['total'])
 
 
 @app.route("/like", methods=['POST'])

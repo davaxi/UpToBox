@@ -57,7 +57,7 @@
             <div class="container container-fluid">
                 <div class="mt-3">
                     <div class="text-center">
-                        <h2 class="text-center mb-3">{{ count }} fichiers au total</h2>
+                        <h2 class="text-center mb-3">{{ count }} fichiers au total pour <span id="totalSize"></span></h2>
                         <a class="btn btn-sm btn-primary mb-3" target="_blank" href="/archive.csv">Télécharger tous les liens</a>
                     </div>
                     <form id="search-form" method="get">
@@ -329,6 +329,8 @@
                             }
                         })
                     }).trigger('submit');
+
+                    $('#totalSize').html(humanFileSize({{ totalSize }} * 1000));
                 }
             )
         </script>
