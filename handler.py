@@ -1,6 +1,6 @@
 import os
 import tools
-from datetime import datetime, timedelta, timezone
+from datetime import datetime
 from flask import Flask, render_template, request
 
 connection = tools.Database()
@@ -14,7 +14,7 @@ def index():
     data = {'ping': 'pong'}
 
     cursor = connection.get_cursor()
-    cursor.execute('SELECT COUNT(*) as count FROM uptobox_link WHERE enabled = true AND expiration_date >= now()')
+    cursor.execute('SELECT COUNT(*) as count FROM uptobox_link WHERE enabled = true')
     row = cursor.fetchone()
 
     return render_template('index.html', token=tools.security.jwt_encode(data), count=row['count'])
@@ -37,21 +37,20 @@ def like_link():
         return {"status": "invalid_data"}
 
     cursor = connection.get_cursor()
-    cursor.execute("SELECT id, expiration_date FROM uptobox_link WHERE enabled = true AND id = %s AND expiration_date >= now()", (data['id'],))
+    cursor.execute("SELECT id, like_count FROM uptobox_link WHERE enabled = true AND id = %s", (data['id'],))
     result = cursor.fetchone()
     if result is None:
         return {"status": "invalid_data"}
 
-    expiration_date = result['expiration_date']
+    like_count = result['like_count']
     if data['action'] == 'up':
-        expiration_date = expiration_date + timedelta(hours=2)
+        like_count = like_count + 1
     else:
-        expiration_date = expiration_date - timedelta(hours=2)
+        like_count = like_count - 1
 
-    cursor.execute('UPDATE uptobox_link SET expiration_date = %s WHERE id = %s', (expiration_date, result['id'],))
+    cursor.execute('UPDATE uptobox_link SET like_count = %s WHERE id = %s', (like_count, result['id'],))
 
-    duration_left = expiration_date - datetime.now(tz=timezone.utc)
-    return {"status": "ok", "temperature": duration_left.total_seconds() // 3600}
+    return {"status": "ok", "like_count": like_count}
 
 
 @app.route("/add", methods=['POST'])
@@ -73,19 +72,18 @@ def add_url():
         return {"status": "invalid_data"}
 
     cursor = connection.get_cursor()
-    cursor.execute("SELECT id, expiration_date FROM uptobox_link WHERE enabled = true AND token = %s", (data['token'],))
+    cursor.execute("SELECT id, like_count FROM uptobox_link WHERE enabled = true AND token = %s", (data['token'],))
     result = cursor.fetchone()
     if result is None:
-        expiration_date = datetime.now(tz=timezone.utc) + timedelta(days=7)
         title_vector = data['title'].replace('.', ' ').replace('-', ' ').replace('_', ' ')
         cursor.execute(
-            'INSERT INTO uptobox_link(date, token, title, size, expiration_date, vector) '
-            'VALUES(%s, %s, %s, %s, %s, to_tsvector(\'french\', %s))',
-            (datetime.now(), data['token'].strip(), data['title'].strip(), data['size'] / 1000, expiration_date, title_vector,)
+            'INSERT INTO uptobox_link(date, token, title, size, vector) '
+            'VALUES(%s, %s, %s, %s, to_tsvector(\'french\', %s))',
+            (datetime.now(), data['token'].strip(), data['title'].strip(), data['size'] / 1000, title_vector,)
         )
     else:
-        expiration_date = result['expiration_date'] + timedelta(hours=10)
-        cursor.execute('UPDATE uptobox_link SET expiration_date = %s WHERE id = %s', (expiration_date, result['id'],))
+        like_count = result['like_count'] + 2
+        cursor.execute('UPDATE uptobox_link SET like_count = %s WHERE id = %s', (like_count, result['id'],))
 
     return {"status": "ok"}
 
@@ -101,7 +99,7 @@ def search():
     query = request.args.get('q', '')
     sort = request.args.get('sort', '')
     order = request.args.get('order', '')
-    if sort not in ['id', 'expiration_date']:
+    if sort not in ['id', 'title', 'size']:
         sort = 'id'
     if order not in ['asc', 'desc']:
         order = 'desc'
@@ -109,20 +107,18 @@ def search():
     cursor = connection.get_cursor()
     if not query:
         cursor.execute(
-            'SELECT id, token, title, size, expiration_date '
+            'SELECT id, token, title, size, like_count '
             'FROM uptobox_link '
             'WHERE enabled = true '
-            'AND expiration_date >= NOW() '
             f'ORDER BY {sort} {order} '
             'LIMIT 100'
         )
     else:
         cursor.execute(
-            'SELECT id, token, title, size, expiration_date '
+            'SELECT id, token, title, size, like_count '
             'FROM uptobox_link '
             'WHERE enabled = true '
             'AND vector @@ websearch_to_tsquery(\'french\', %s) '
-            'AND expiration_date >= NOW() '
             f'ORDER BY {sort} {order} '
             f'LIMIT 100',
             (query, )
@@ -130,13 +126,12 @@ def search():
 
     items = []
     for item in cursor.fetchall():
-        duration_left = item['expiration_date'] - datetime.now(tz=timezone.utc)
         items.append({
             'id': item['id'],
             'title': item['title'],
             'size': item['size'] * 1000,
+            'like_count': item['like_count'],
             'link': 'https://uptobox.com/' + item['token'],
-            'temperature': duration_left.total_seconds() // 3600,
         })
 
     return {"status": "ok", "items": items}
