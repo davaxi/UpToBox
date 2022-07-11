@@ -9,3 +9,5 @@ DROP INDEX IF EXISTS uptobox_link_expiration_date_index ;
 ALTER TABLE uptobox_link ADD COLUMN exported BOOLEAN NOT NULL DEFAULT FALSE;
 ALTER TABLE uptobox_link DROP COLUMN IF EXISTS expiration_date;
 ALTER TABLE uptobox_link ADD COLUMN like_count INTEGER NOT NULL DEFAULT 0;
+ALTER TABLE uptobox_link ALTER COLUMN date SET DEFAULT NOW();
+ALTER TABLE uptobox_link ALTER COLUMN vector DROP NOT NULL ;

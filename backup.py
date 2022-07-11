@@ -25,7 +25,7 @@ fieldnames = ['id', 'link', 'title', 'size', 'like_count']
 with open(tools.ARCHIVE_PATH, 'a', encoding='UTF8') as file:
 
     writer = csv.DictWriter(file, fieldnames=fieldnames)
-    writer.writeheader()
+    # writer.writeheader()
     for row in rows:
         row['size'] = row['size'] * 1000
         writer.writerow(row)

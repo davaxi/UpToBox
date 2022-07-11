@@ -1,6 +1,7 @@
 import re
 import csv
 import math
+import urllib.error
 from urllib.request import Request, urlopen
 
 
@@ -20,8 +21,14 @@ def scrap(url):
     request = Request(url)
     request.add_header('Referer', 'https://tirexo.io')
     request.add_header('User-agent', 'Mozilla/5.0 (Windows; U; Windows NT 5.1; de; rv:1.9.1.5) Gecko/20091102 Firefox/3.5.5')
-    response = urlopen(request).read()
-    content = response.decode('utf-8')
+    try:
+        response = urlopen(request).read()
+        content = response.decode('utf-8')
+    except urllib.error.HTTPError as e:
+        if e.code == 404:
+            print(f'Not found : {url}')
+            return None
+        raise e
 
     match_title = re.findall(r'<title>([^<]+)<\/title>', content, re.MULTILINE)
     if not match_title:

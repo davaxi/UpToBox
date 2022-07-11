@@ -30,7 +30,7 @@ services:
       - .:/app
       - .cache:/root/.cache
     env_file:
-      - .env-local
+      - .env-production
 
   web:
     networks:
