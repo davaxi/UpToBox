@@ -50,14 +50,16 @@
             <div class="b-example-divider"></div>
             <div class="container container-fluid">
                 <div class="m-3 text-justify">
-                    <p>Les liens restent tant qu'ils sont <span class="text-danger fw-bold text-decoration-underline">chauds</span>. Dès le moment où un lien arrive à <span class="text-primary fw-bold">0°</span> celui-ci est automatiquement supprimé de la base. Lors du partage d'un lien, celui-ci démarre à <span class="text-danger fw-bold">168 °</span> si le lien n'est pas connu, sinon le lien déjà enregistré augment de <span class="text-danger fw-bold">24°</span>. Toutes les heures un lien perd <span class="text-primary fw-bold">1°</span> jusqu'à ce qu'il soit complètement <span class="text-primary fw-bold text-decoration-underline">froid</span> et soit donc supprimé. Vous pouvez à tout moment, <span class="text-primary fw-bold">refroidir</span> ou <span class="text-danger fw-bold">réchauffer</span> un lien de <strong>2 °</strong>.</p>
                     <p>Il n'y a <span class="text-decoration-underline fw-bold">aucun</span> système de cookie sur le site, ni de Google Analytics ou tout autre système de tracking utilisateur. De même, il n'y a ni publicité ou ni lien d'affiliation. Ils sont donc automatiquement supprimés des URLs qui sont partagés.</p>
                 </div>
             </div>
             <div class="b-example-divider"></div>
             <div class="container container-fluid">
                 <div class="mt-3">
-                    <h2 class="text-center mb-3">{{ count }} fichiers au total</h2>
+                    <div class="text-center">
+                        <h2 class="text-center mb-3">{{ count }} fichiers au total</h2>
+                        <a class="btn btn-sm btn-primary mb-3" target="_blank" href="/archive.csv">Télécharger tous les liens</a>
+                    </div>
                     <form id="search-form" method="get">
                         <input type="hidden" name="sort" value="id" />
                         <input type="hidden" name="order" value="desc" />
