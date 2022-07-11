@@ -1,2 +1,2 @@
 
-*/2 * * * * python /app/backup.py > /dev/null
+*/2 * * * * /usr/local/bin/python /app/backup.py >> /dev/null
