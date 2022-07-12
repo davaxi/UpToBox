@@ -17,15 +17,15 @@ cursor.execute(
     '   size as size, '
     '   like_count as like_count '
     'FROM uptobox_link '
-    'WHERE enabled = true AND exported = false ORDER BY id')
+    'WHERE enabled = true ORDER BY id')
 rows = cursor.fetchall()
 
 ids = []
 fieldnames = ['id', 'link', 'title', 'size', 'like_count']
-with open(tools.ARCHIVE_PATH, 'a', encoding='UTF8') as file:
+with open(tools.ARCHIVE_PATH, 'w', encoding='UTF8') as file:
 
     writer = csv.DictWriter(file, fieldnames=fieldnames)
-    # writer.writeheader()
+    writer.writeheader()
     for row in rows:
         row['size'] = row['size'] * 1000
         writer.writerow(row)
