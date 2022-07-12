@@ -113,6 +113,7 @@
                         <thead>
                         <tr>
                             <th scope="col" >Nom</th>
+                            <th scope="col" ></th>
                             <th scope="col" >Taille</th>
                             <th scope="col"></th>
                         </tr>
@@ -152,6 +153,9 @@
                 var regex = /(\d+(?:\.\d+)?)\s?(k|m|g|t)?b?/i;
 
                 var res = regex.exec(text);
+                if (!res[2]) {
+                    return parseInt(res[1]);
+                }
 
                 return parseInt(res[1] * Math.pow(1024, powers[res[2].toLowerCase()]));
             }
@@ -192,8 +196,15 @@
                         crawlingLink = 0,
                         goodImportIcon = '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-bookmark-check-fill" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M2 15.5V2a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v13.5a.5.5 0 0 1-.74.439L8 13.069l-5.26 2.87A.5.5 0 0 1 2 15.5zm8.854-9.646a.5.5 0 0 0-.708-.708L7.5 7.793 6.354 6.646a.5.5 0 1 0-.708.708l1.5 1.5a.5.5 0 0 0 .708 0l3-3z"/></svg>',
                         badImportIcon = '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-bookmark-x" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M6.146 5.146a.5.5 0 0 1 .708 0L8 6.293l1.146-1.147a.5.5 0 1 1 .708.708L8.707 7l1.147 1.146a.5.5 0 0 1-.708.708L8 7.707 6.854 8.854a.5.5 0 1 1-.708-.708L7.293 7 6.146 5.854a.5.5 0 0 1 0-.708z"/><path d="M2 2a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v13.5a.5.5 0 0 1-.777.416L8 13.101l-5.223 2.815A.5.5 0 0 1 2 15.5V2zm2-1a1 1 0 0 0-1 1v12.566l4.723-2.482a.5.5 0 0 1 .554 0L13 14.566V2a1 1 0 0 0-1-1H4z"/></svg>',
+                        updateTrToSuccess = function($this, data) {
+                            $this
+                                .addClass('table-success')
+                                .find('td.item-loading').html(goodImportIcon).end()
+                                .find('td.item-name').text(data['title']).end()
+                                .find('td.item-size').text(humanFileSize(data['size'])).end()
+                        },
                         submitLink = function($this, data) {
-                            $.ajax({
+                            return $.ajax({
                                 url: '/add',
                                 method: 'POST',
                                 data: JSON.stringify(data),
@@ -208,43 +219,11 @@
                                         window.location.reload();
                                         return;
                                     }
-                                    $this
-                                        .addClass('table-success')
-                                        .find('td:first').html(goodImportIcon).end()
-                                        .find('td.item-name').text(data['title']).end()
-                                        .find('td.item-size').text(humanFileSize(data['size'])).end()
+                                    updateTrToSuccess()
                                 }
                             })
                         },
-                        crawlLink = function($this, link) {
-                            var token = getUpToBoxToken(link);
-                            $.ajax({
-                                method: 'POST',
-                                processData: false,
-                                url: 'https://uptobox.com/' + token,
-                                success: function(response) {
-                                    var data = getUpToBoxData(token, response);
-                                    if (!data['size']) {
-                                        $this.addClass('table-danger').find('td:first').html(badImportIcon);
-                                        return;
-                                    }
-                                    submitLink($this, data)
-                                },
-                                error: function() {
-                                    $this.addClass('table-danger').find('td:first').html(badImportIcon);
-                                },
-                                complete: function() {
-                                    crawlingLink--;
-                                }
-                            })
-                        },
-                        updateTemperature = function(event, $this, action) {
-                            var $tr = $this.closest('tr');
-
-                            $tr.find('button').attr('disabled', 'disabled');
-
-                            event.preventDefault();
-
+                        submitTemperature = function($tr, action) {
                             $.ajax({
                                 url: '/like',
                                 method: 'POST',
@@ -266,6 +245,44 @@
                                     $tr.find('.link-count').text(response['like_count']);
                                 }
                             })
+                        },
+                        crawlLink = function($this, link, publish) {
+                            var token = getUpToBoxToken(link);
+                            $.ajax({
+                                method: 'POST',
+                                processData: false,
+                                url: 'https://uptobox.com/' + token,
+                                success: function(response) {
+                                    var data = getUpToBoxData(token, response);
+                                    if (!data['size']) {
+                                        $this.addClass('table-danger').find('.item-loading').html(badImportIcon);
+                                        return;
+                                    }
+                                    if (publish) {
+                                        submitLink($this, data)
+                                    } else {
+                                        updateTrToSuccess($this, data)
+                                        submitTemperature($this, 'up')
+                                    }
+                                },
+                                error: function() {
+                                    $this.addClass('table-danger').find('td.item-loading').html(badImportIcon);
+                                    if (!publish) {
+                                        submitTemperature($this, 'down')
+                                    }
+                                },
+                                complete: function() {
+                                    crawlingLink--;
+                                }
+                            })
+                        },
+                        updateTemperature = function(event, $this, action) {
+                            var $tr = $this.closest('tr');
+
+                            $tr.find('button').attr('disabled', 'disabled');
+
+                            event.preventDefault();
+                            submitTemperature($tr, action)
                         }
 
                     $postResult.hide();
@@ -283,7 +300,7 @@
 
                         $.each(lines, function(index, line) {
                             var $item = $('<tr />');
-                            $item.append('<td><div class="spinner-border spinner-border-sm" role="status"><span class="visually-hidden">Loading...</span></div></td>');
+                            $item.append('<td class="item-loading"><div class="spinner-border spinner-border-sm" role="status"><span class="visually-hidden">Loading...</span></div></td>');
                             $item.append('<th scope="row">' + index + '</th>');
                             $item.append($('<td/>').text(line));
                             $item.append('<td style="max-width: 100px" class="text-truncate item-name"></td>');
@@ -293,7 +310,7 @@
                             crawlingLink++;
                             setTimeout(
                                 function() {
-                                    crawlLink($item, line);
+                                    crawlLink($item, line, true);
                                 },
                                 index * 2000
                             )
@@ -319,6 +336,16 @@
                             updateTemperature(event, $(this), 'down');
                         });
 
+                    $resultTableBody.on('mouseover', 'tr', function(event) {
+                        var $this = $(this);
+
+                        if ($this.data('scraped')) {
+                            return;
+                        }
+                        $this.data('scraped', true)
+                        $this.find('.item-loading').html('<div class="spinner-border spinner-border-sm" role="status"><span class="visually-hidden">Loading...</span></div>');
+                        crawlLink($this, $this.data('link'), false);
+                    })
                     $searchForm.on('submit', function(event) {
                         event.preventDefault();
 
@@ -348,11 +375,12 @@
                                         .append(
                                             $('<div class="text-truncate" />').text(item['title']).attr('title', item['title'])
                                         )
-                                        .append('<small><a href="'+ item['link']+'" target="_blank">' + item['link'] + '</a></small>');
+                                        .append('<small><a href="'+ item['link'] +'" target="_blank">' + item['link'] + '</a></small>');
 
 
                                     var $item = $('<tr data-link-id="' + item['id'] + '" />');
                                     $item.append(name)
+                                    $item.append('<td class="item-loading"></td>');
                                     $item.append($('<td>').text(humanFileSize(item['size'])))
                                     $item.append('<td style="text-align: right">' +
                                         '<div class="btn-group" role="group" aria-label="Basic mixed styles example">' +
@@ -369,6 +397,8 @@
                                             '</button>' +
                                         '</div>' +
                                     '</td>')
+                                    $item.data('link', item['link'])
+                                    $item.data('scraped', false)
                                     $resultTableBody.append($item);
                                 });
                             }
