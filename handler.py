@@ -155,6 +155,40 @@ def search():
     return {"status": "ok", "items": items}
 
 
+@app.route("/stats", methods=['GET'])
+def stats():
+
+    cursor = connection.get_cursor()
+    cursor.execute('SELECT COUNT(*) as count, SUM(size) as total FROM uptobox_link WHERE enabled = true')
+    row = cursor.fetchone()
+
+    cursor.execute(
+        'SELECT '
+        'id, '
+        'token, '
+        'title, '
+        'size, '
+        'like_count '
+        'FROM uptobox_link '
+        'WHERE enabled = true '
+        'ORDER BY id DESC '
+        'LIMIT 20'
+    )
+    items = []
+    for item in cursor.fetchall():
+        item['size'] *= 1000
+        item['humanSize'] = tools.tools.sizeof_fmt(item['size'])
+        item['link'] = f"https://uptobox.com/{item['token']}"
+        items.append(item)
+
+    return {
+        "linkCount": row['count'],
+        "linkTotalSize": row['total'] * 1000,
+        "linkTotalHumanSize": tools.tools.sizeof_fmt(row['total'] * 1000),
+        'lastLinks': items
+    }
+
+
 if __name__ == "__main__":
     port = int(os.environ.get('FLASK_PORT', 5000))
     app.run(debug=False, host='0.0.0.0', port=port)
