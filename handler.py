@@ -18,6 +18,10 @@ def cgu():
 
 @app.route("/", methods=['GET'])
 def index():
+    now = datetime.now()
+    if tools.project_is_offline():
+        return render_template('index.offline.html', year=now.year)
+
     data = {'ping': 'pong'}
 
     cursor = connection.get_cursor()
@@ -31,7 +35,6 @@ def index():
         stats = os.stat(tools.constant.ARCHIVE_PATH)
         archive_size = stats.st_size
 
-    now = datetime.now()
     return render_template(
         'index.html',
         token=tools.security.jwt_encode(data),
@@ -45,11 +48,8 @@ def index():
 
 @app.route("/like", methods=['POST'])
 def like_link():
-    authorization = request.headers.get('Authorization', '')
-    token = tools.security.get_token(authorization)
-    data = tools.security.jwt_decode(token)
-    if data is None:
-        return {"status": "unauthorized"}
+    if not tools.user_has_rights(request):
+        return {'status': 'unauthorized'}
 
     data = request.get_json()
     if 'id' not in data:
@@ -78,11 +78,8 @@ def like_link():
 
 @app.route("/add", methods=['POST'])
 def add_url():
-    authorization = request.headers.get('Authorization', '')
-    token = tools.security.get_token(authorization)
-    data = tools.security.jwt_decode(token)
-    if data is None:
-        return {"status": "unauthorized"}
+    if not tools.user_has_rights(request):
+        return {'status': 'unauthorized'}
 
     data = request.get_json()
     if 'token' not in data:
@@ -113,11 +110,8 @@ def add_url():
 
 @app.route("/search", methods=['GET'])
 def search():
-    authorization = request.headers.get('Authorization', '')
-    token = tools.security.get_token(authorization)
-    data = tools.security.jwt_decode(token)
-    if data is None:
-        return {"status": "unauthorized"}
+    if not tools.user_has_rights(request):
+        return {'status': 'unauthorized'}
 
     start_withs = [letter for letter in string.ascii_uppercase]
     start_withs.append('number')
