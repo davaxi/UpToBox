@@ -1,357 +1,198 @@
-<!doctype html>
-<html lang="fr">
-    <head>
-        <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <title>UpToBox - Publisher</title>
-        <meta name="robots" content="noindex" />
-        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor" crossorigin="anonymous">
-        <style>
-            .b-example-divider {
-                height: 3rem;
-                background-color: rgba(0, 0, 0, .1);
-                border: solid rgba(0, 0, 0, .15);
-                border-width: 1px 0;
-                box-shadow: inset 0 .5em 1.5em rgba(0, 0, 0, .1), inset 0 .125em .5em rgba(0, 0, 0, .15);
-            }
-            .table {
-                text-align: left;
-            }
-        </style>
-    </head>
-    <body>
-        <main>
-            <div class="px-4 py-5 my-5 text-center">
-                <h1 class="display-5 fw-bold">UpToBox - Publisher</h1>
-                <div class="col-lg-6 mx-auto">
-                    <p class="lead mb-4">Partagez à la communauté vos liens de vos fichiers UpToBox</p>
-                    <div id="post-result">
-                        <table class="table">
-                            <thead>
-                                <tr>
-                                    <th scope="col" width="10"></th>
-                                    <th scope="col">#</th>
-                                    <th scope="col"></th>
-                                    <th scope="col" >Nom</th>
-                                    <th scope="col" >Taille</th>
-                                </tr>
-                            </thead>
-                            <tbody></tbody>
-                        </table>
-                        Patientez que tous les liens soient partagés...
-                    </div>
+{% extends 'base.html' %}
 
-                    <form id="post-form" action="get">
-                        <textarea id="links" name="links" rows="5" class="form-control" placeholder="Copiez vos liens UpToBox (max. 500 lien)"></textarea>
-                        <button type="submit" class="btn btn-lg btn-primary mt-3">Partager les liens</button>
-                    </form>
-                </div>
+{% set title = 'UpToBox - Publisher' %}
+
+{% block content %}
+    <div class="px-4 py-5 my-5 text-center">
+        <h1 class="display-5 fw-bold">UpToBox - Publisher</h1>
+        <div class="col-lg-6 mx-auto">
+            <p class="lead mb-4">Partagez à la communauté vos liens de vos fichiers UpToBox</p>
+            <div id="post-result">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th scope="col" width="10"></th>
+                            <th scope="col">#</th>
+                            <th scope="col"></th>
+                            <th scope="col" >Nom</th>
+                            <th scope="col" >Taille</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+                Patientez que tous les liens soient partagés...
             </div>
-            <div class="b-example-divider"></div>
-            <div class="container container-fluid">
-                <div class="m-3 text-justify">
-                    <h3>Conditions générales d'utilisation</h3>
-                    <p>Cette page permet uniquement de partager des liens uptobox, il n'héberge <span class="text-decoration-underline fw-bold">aucun fichier.</span></p>
-                    <p>Les liens vers de la pornographie, nudité, image à caractère sexuelle ou n'importe quel type d'image ou de vidéo à caractère offensif sont interdites. Le matériel soumis à un droit d'auteur est également strictement interdit. Nous nous réservons le droit de décider de la qualification d'un contenu, approprié ou non, et de supprimer un lien quel qu'il soit sans aucune notification.</p>
-                    <p>L'utilisateur accepte de se soumettre à toutes les lois appliquées à sa localisation, notamment les lois relatives aux droits d'auteur et aux marques déposées. Les liens d'images, vidéos et fichiers violant un droit d'auteur ou une marque déposée sont prohibées. Si un tier dépose une réclamation d'infraction envers un lien, il sera supprimer. Si un conflit émerge entre plusieurs tiers sur notre service, on se réserve le droit de ne pas intervenir.</p>
-                    <p>Nous nous engageons à coopérer avec n'importe quelle autorité compétente si une investigation devrait survenir.</p>
-                    <p>Il n'y a <span class="text-decoration-underline fw-bold">aucun</span> système de cookie sur le site, ni de Google Analytics ou tout autre système de tracking utilisateur. De même, il n'y a ni publicité ou ni lien d'affiliation. Ils sont donc automatiquement supprimés des URLs qui sont partagés. L'ensemble des liens est téléchargeable à tout moment par tout utilisateur.</p>
-                </div>
+
+            <form id="post-form" action="get">
+                <textarea id="links" name="links" rows="5" class="form-control" placeholder="Copiez vos liens UpToBox (max. 500 lien)"></textarea>
+                <button type="submit" class="btn btn-lg btn-primary mt-3">Partager les liens</button>
+            </form>
+        </div>
+    </div>
+    <div class="b-example-divider"></div>
+    <div class="container container-fluid">
+        <div class="m-3 text-justify">
+            <h3>Conditions générales d'utilisation</h3>
+            <p>Cette page permet uniquement de partager des liens uptobox, il n'héberge <span class="text-decoration-underline fw-bold">aucun fichier.</span></p>
+            <p>Les liens vers de la pornographie, nudité, image à caractère sexuelle ou n'importe quel type d'image ou de vidéo à caractère offensif sont interdites. Le matériel soumis à un droit d'auteur est également strictement interdit. Nous nous réservons le droit de décider de la qualification d'un contenu, approprié ou non, et de supprimer un lien quel qu'il soit sans aucune notification.</p>
+            <p>L'utilisateur accepte de se soumettre à toutes les lois appliquées à sa localisation, notamment les lois relatives aux droits d'auteur et aux marques déposées. Les liens d'images, vidéos et fichiers violant un droit d'auteur ou une marque déposée sont prohibées. Si un tier dépose une réclamation d'infraction envers un lien, il sera supprimer. Si un conflit émerge entre plusieurs tiers sur notre service, on se réserve le droit de ne pas intervenir.</p>
+            <p>Nous nous engageons à coopérer avec n'importe quelle autorité compétente si une investigation devrait survenir.</p>
+            <p>Il n'y a <span class="text-decoration-underline fw-bold">aucun</span> système de cookie sur le site, ni de Google Analytics ou tout autre système de tracking utilisateur. De même, il n'y a ni publicité ou ni lien d'affiliation. Ils sont donc automatiquement supprimés des URLs qui sont partagés. L'ensemble des liens est téléchargeable à tout moment par tout utilisateur.</p>
+            <p><a href="/cgu">Voir toutes les CGU</a></p>
+        </div>
+    </div>
+    <div class="b-example-divider"></div>
+    <div class="container container-fluid">
+        <div class="mt-3">
+            <div class="text-center">
+                <h2 class="text-center mb-3">{{ count }} fichiers au total pour <span id="totalSize"></span></h2>
+                <a class="btn btn-sm btn-primary mb-3" target="_blank" href="/archive.csv">Télécharger tous les liens (<span id="archiveSize"></span>)</a>
             </div>
-            <div class="b-example-divider"></div>
-            <div class="container container-fluid">
-                <div class="mt-3">
-                    <div class="text-center">
-                        <h2 class="text-center mb-3">{{ count }} fichiers au total pour <span id="totalSize"></span></h2>
-                        <a class="btn btn-sm btn-primary mb-3" target="_blank" href="/archive.csv">Télécharger tous les liens (<span id="archiveSize"></span>)</a>
-                    </div>
-                    <form id="search-form" method="get">
-                        <input type="hidden" name="start-with" value="" id="start-with" />
+            <form id="search-form" method="get">
+                <input type="hidden" name="start-with" value="" id="start-with" />
+                <div class="input-group mb-3">
+                    <input id="search-query" name="q" type="text" class="form-control" placeholder="Chercher un fichier..." />
+                    <button class="btn btn-outline-secondary" type="submit" id="button-addon2">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
+                            <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z"/>
+                        </svg>
+                    </button>
+                </div>
+                <div class="row">
+                    <div class="col">
                         <div class="input-group mb-3">
-                            <input id="search-query" name="q" type="text" class="form-control" placeholder="Chercher un fichier..." />
-                            <button class="btn btn-outline-secondary" type="submit" id="button-addon2">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
-                                    <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z"/>
+                            <label class="input-group-text" for="sort">Trier par</label>
+                            <select class="form-select" id="sort" name="sort">
+                                <option selected="selected" value="id">Date d'ajout du lien</option>
+                                <option value="title">Nom du fichier</option>
+                                <option value="size">Taille de fichier</option>
+                                <option value="like_count">Nombre de like</option>
+                            </select>
+                            <select class="form-select" id="sort" name="order">
+                                <option selected="selected" value="desc">Décroissant</option>
+                                <option value="asc">Croissant</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col">
+                        <div class="btn-group">
+                            <label class="input-group-text" for="sort">Titre commençant par</label>
+                            <button type="button" data-start-with="" class="btn btn-secondary btn-start-with">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-x" viewBox="0 0 16 16">
+                                    <path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z"/>
                                 </svg>
                             </button>
+                            {% for letter in letters %}
+                                <button type="button" data-start-with="{{ letter }}" class="btn btn-outline-secondary btn-start-with">{{ letter }}</button>
+                            {% endfor %}
+                            <button type="button" data-start-with="number" class="btn btn-outline-secondary btn-start-with">0 - 9</button>
                         </div>
-                        <div class="row">
-                            <div class="col">
-                                <div class="input-group mb-3">
-                                    <label class="input-group-text" for="sort">Trier par</label>
-                                    <select class="form-select" id="sort" name="sort">
-                                        <option selected="selected" value="id">Date d'ajout du lien</option>
-                                        <option value="title">Nom du fichier</option>
-                                        <option value="size">Taille de fichier</option>
-                                        <option value="like_count">Nombre de like</option>
-                                    </select>
-                                    <select class="form-select" id="sort" name="order">
-                                        <option selected="selected" value="desc">Décroissant</option>
-                                        <option value="asc">Croissant</option>
-                                    </select>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col">
-                                <div class="btn-group">
-                                    <label class="input-group-text" for="sort">Titre commençant par</label>
-                                    <button type="button" data-start-with="" class="btn btn-secondary btn-start-with">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-x" viewBox="0 0 16 16">
-                                            <path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z"/>
-                                        </svg>
-                                    </button>
-                                    {% for letter in letters %}
-                                        <button type="button" data-start-with="{{ letter }}" class="btn btn-outline-secondary btn-start-with">{{ letter }}</button>
-                                    {% endfor %}
-                                    <button type="button" data-start-with="number" class="btn btn-outline-secondary btn-start-with">0 - 9</button>
-                                </div>
-                            </div>
-                        </div>
-                    </form>
-                    <table class="table align-middle" id="search-result">
-                        <thead>
-                        <tr>
-                            <th scope="col" >Nom</th>
-                            <th scope="col" ></th>
-                            <th scope="col" >Taille</th>
-                            <th scope="col"></th>
-                        </tr>
-                        </thead>
-                        <tbody></tbody>
-                    </table>
+                    </div>
                 </div>
-            </div>
-        </main>
+            </form>
+            <table class="table align-middle" id="search-result">
+                <thead>
+                <tr>
+                    <th scope="col" >Nom</th>
+                    <th scope="col" ></th>
+                    <th scope="col" >Taille</th>
+                    <th scope="col"></th>
+                </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+        </div>
+    </div>
+{% endblock %}
 
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" integrity="sha512-894YE6QWD5I59HgZOGReFYm4dnWc1Qt5NtvYSaNcOP+u1T9qYdvdihz0PPSiiqn/+/3e7Jo4EaG7TubfWGUrMQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-        <script type="text/javascript">
-            // https://stackoverflow.com/questions/10420352/converting-file-size-in-bytes-to-human-readable-string
-            function humanFileSize(bytes, si=false, dp=1) {
-              const thresh = si ? 1000 : 1024;
+{% block javascript %}
+    <script type="text/javascript">
+        // https://stackoverflow.com/questions/10420352/converting-file-size-in-bytes-to-human-readable-string
+        function humanFileSize(bytes, si=false, dp=1) {
+          const thresh = si ? 1000 : 1024;
 
-              if (Math.abs(bytes) < thresh) {
-                return bytes + ' B';
-              }
+          if (Math.abs(bytes) < thresh) {
+            return bytes + ' B';
+          }
 
-              const units = si
-                ? ['kB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB']
-                : ['KiB', 'MiB', 'GiB', 'TiB', 'PiB', 'EiB', 'ZiB', 'YiB'];
-              let u = -1;
-              const r = 10**dp;
+          const units = si
+            ? ['kB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB']
+            : ['KiB', 'MiB', 'GiB', 'TiB', 'PiB', 'EiB', 'ZiB', 'YiB'];
+          let u = -1;
+          const r = 10**dp;
 
-              do {
-                bytes /= thresh;
-                ++u;
-              } while (Math.round(Math.abs(bytes) * r) / r >= thresh && u < units.length - 1);
+          do {
+            bytes /= thresh;
+            ++u;
+          } while (Math.round(Math.abs(bytes) * r) / r >= thresh && u < units.length - 1);
 
-              return bytes.toFixed(dp) + ' ' + units[u];
-            }
-            // https://stackoverflow.com/questions/6974614/how-to-convert-human-readable-memory-size-into-bytes
-            function unhumanize(text) {
-                var powers = {'k': 1, 'm': 2, 'g': 3, 't': 4};
-                var regex = /(\d+(?:\.\d+)?)\s?(k|m|g|t)?b?/i;
+          return bytes.toFixed(dp) + ' ' + units[u];
+        }
+        // https://stackoverflow.com/questions/6974614/how-to-convert-human-readable-memory-size-into-bytes
+        function unhumanize(text) {
+            var powers = {'k': 1, 'm': 2, 'g': 3, 't': 4};
+            var regex = /(\d+(?:\.\d+)?)\s?(k|m|g|t)?b?/i;
 
-                var res = regex.exec(text);
-                if (!res[2]) {
-                    return parseInt(res[1]);
-                }
-
-                return parseInt(res[1] * Math.pow(1024, powers[res[2].toLowerCase()]));
-            }
-
-            function getUpToBoxToken(url) {
-                var el = document.createElement('a');
-                el.href = url;
-                return el.pathname.substring(1)
-            }
-            function getUpToBoxData(token, content) {
-                var data = {'token': token, 'title': '', size: 0},
-                    titleRegex = /<title>([^<]+)<\/title>/gm,
-                    sizeRegex = /<h1 class='file-title'>.* \(([^\)]+)\)<\/h1>/gm,
-                    matchTitle = titleRegex.exec(content),
-                    sizeMatch = sizeRegex.exec(content);
-
-                if (!matchTitle || !matchTitle.length || !sizeMatch || !sizeMatch.length) {
-                    return data
-                }
-
-                data['title'] = matchTitle[1];
-                data['size'] = unhumanize(sizeMatch[1]);
-                return data;
+            var res = regex.exec(text);
+            if (!res[2]) {
+                return parseInt(res[1]);
             }
 
-            $(document).ready(
-                function() {
-                    var $resultTable = $('#search-result'),
-                        $resultTableBody = $resultTable.find('tbody'),
-                        $searchForm = $('#search-form'),
-                        $inputStartWith = $('#start-with'),
-                        $searchQuery = $('#search-query'),
-                        $postForm = $('#post-form'),
-                        $postResult = $('#post-result'),
-                        $postResultTableBody = $postResult.find('table tbody'),
-                        $links = $('#links'),
-                        $btnStartWith = $('.btn-start-with'),
-                        crawlingLink = 0,
-                        goodImportIcon = '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-bookmark-check-fill" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M2 15.5V2a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v13.5a.5.5 0 0 1-.74.439L8 13.069l-5.26 2.87A.5.5 0 0 1 2 15.5zm8.854-9.646a.5.5 0 0 0-.708-.708L7.5 7.793 6.354 6.646a.5.5 0 1 0-.708.708l1.5 1.5a.5.5 0 0 0 .708 0l3-3z"/></svg>',
-                        badImportIcon = '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-bookmark-x" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M6.146 5.146a.5.5 0 0 1 .708 0L8 6.293l1.146-1.147a.5.5 0 1 1 .708.708L8.707 7l1.147 1.146a.5.5 0 0 1-.708.708L8 7.707 6.854 8.854a.5.5 0 1 1-.708-.708L7.293 7 6.146 5.854a.5.5 0 0 1 0-.708z"/><path d="M2 2a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v13.5a.5.5 0 0 1-.777.416L8 13.101l-5.223 2.815A.5.5 0 0 1 2 15.5V2zm2-1a1 1 0 0 0-1 1v12.566l4.723-2.482a.5.5 0 0 1 .554 0L13 14.566V2a1 1 0 0 0-1-1H4z"/></svg>',
-                        updateTrToSuccess = function($this, data) {
-                            $this
-                                .find('td.item-loading').addClass('text-success').html(goodImportIcon).end()
-                                .find('td.item-name').text(data['title']).end()
-                                .find('td.item-size').text(humanFileSize(data['size'])).end()
-                        },
-                        submitLink = function($this, data) {
-                            return $.ajax({
-                                url: '/add',
-                                method: 'POST',
-                                data: JSON.stringify(data),
-                                processData: false,
-                                contentType: 'application/json',
-                                dataType: 'JSON',
-                                headers: {
-                                    'Authorization': 'Bearer {{ token }}',
-                                },
-                                success: function(response) {
-                                    if (response['status'] === 'unauthorized') {
-                                        window.location.reload();
-                                        return;
-                                    }
-                                    updateTrToSuccess($this, data)
-                                }
-                            })
-                        },
-                        submitTemperature = function($tr, action) {
-                            $.ajax({
-                                url: '/like',
-                                method: 'POST',
-                                data: JSON.stringify({'id': parseInt($tr.data('link-id')), 'action': action}),
-                                processData: false,
-                                contentType: 'application/json',
-                                dataType: 'JSON',
-                                headers: {
-                                    'Authorization': 'Bearer {{ token }}',
-                                },
-                                success: function(response) {
-                                    if (response['status'] === 'unauthorized') {
-                                        window.location.reload();
-                                        return;
-                                    }
-                                    if (response['status'] !== 'ok') {
-                                        return;
-                                    }
-                                    $tr.find('.link-count').text(response['like_count']);
-                                }
-                            })
-                        },
-                        crawlLink = function($this, link, publish) {
-                            var token = getUpToBoxToken(link);
-                            $.ajax({
-                                method: 'POST',
-                                processData: false,
-                                url: 'https://uptobox.com/' + token,
-                                success: function(response) {
-                                    var data = getUpToBoxData(token, response);
-                                    if (!data['size']) {
-                                        $this.addClass('table-danger').find('.item-loading').html(badImportIcon);
-                                        return;
-                                    }
-                                    if (publish) {
-                                        submitLink($this, data)
-                                    } else {
-                                        updateTrToSuccess($this, data)
-                                        submitTemperature($this, 'up')
-                                    }
-                                },
-                                error: function() {
-                                    $this.addClass('table-danger').find('td.item-loading').html(badImportIcon);
-                                    if (!publish) {
-                                        submitTemperature($this, 'down')
-                                    }
-                                },
-                                complete: function() {
-                                    crawlingLink--;
-                                }
-                            })
-                        },
-                        updateTemperature = function(event, $this, action) {
-                            var $tr = $this.closest('tr');
+            return parseInt(res[1] * Math.pow(1024, powers[res[2].toLowerCase()]));
+        }
 
-                            $tr.find('button').attr('disabled', 'disabled');
+        function getUpToBoxToken(url) {
+            var el = document.createElement('a');
+            el.href = url;
+            return el.pathname.substring(1)
+        }
+        function getUpToBoxData(token, content) {
+            var data = {'token': token, 'title': '', size: 0},
+                titleRegex = /<title>([^<]+)<\/title>/gm,
+                sizeRegex = /<h1 class='file-title'>.* \(([^\)]+)\)<\/h1>/gm,
+                matchTitle = titleRegex.exec(content),
+                sizeMatch = sizeRegex.exec(content);
 
-                            event.preventDefault();
-                            submitTemperature($tr, action)
-                        }
+            if (!matchTitle || !matchTitle.length || !sizeMatch || !sizeMatch.length) {
+                return data
+            }
 
-                    $postResult.hide();
-                    $postForm.on('submit', function(event) {
-                        event.preventDefault();
+            data['title'] = matchTitle[1];
+            data['size'] = unhumanize(sizeMatch[1]);
+            return data;
+        }
 
-                        var lines = $links.val().split("\n").filter(n => n.trim())
-                        if (!lines.length) {
-                            return
-                        }
-                        $postForm.hide();
-                        $postResult.show();
-                        $postResultTableBody.empty();
-                        $links.val('');
-
-                        $.each(lines, function(index, line) {
-                            var $item = $('<tr />');
-                            $item.append('<td class="item-loading"><div class="spinner-border spinner-border-sm" role="status"><span class="visually-hidden">Loading...</span></div></td>');
-                            $item.append('<th scope="row">' + index + '</th>');
-                            $item.append($('<td/>').text(line));
-                            $item.append('<td style="max-width: 100px" class="text-truncate item-name"></td>');
-                            $item.append('<td class="item-size"></td>');
-                            $postResultTableBody.append($item)
-
-                            crawlingLink++;
-                            setTimeout(
-                                function() {
-                                    crawlLink($item, line, true);
-                                },
-                                index * 2000
-                            )
-                        })
-                        var interval = setInterval(function() {
-                            if (crawlingLink > 0) {
-                                return;
-                            }
-                            $postForm.show()
-                            $postResult.hide();
-                            clearInterval(interval);
-
-                            $searchQuery.val('');
-                            $searchForm.trigger('submit');
-                        }, 2000)
-                    })
-
-                    $resultTable
-                        .on('click', '.btn-link-up', function(event) {
-                            updateTemperature(event, $(this), 'up');
-                        })
-                        .on('click', '.btn-link-down', function(event) {
-                            updateTemperature(event, $(this), 'down');
-                        });
-
-                    $resultTableBody.on('mouseover', 'tr', function(event) {
-                        var $this = $(this);
-
-                        if ($this.data('scraped')) {
-                            return;
-                        }
-                        $this.data('scraped', true)
-                        $this.find('.item-loading').html('<div class="spinner-border spinner-border-sm" role="status"><span class="visually-hidden">Loading...</span></div>');
-                        crawlLink($this, $this.data('link'), false);
-                    })
-                    $searchForm.on('submit', function(event) {
-                        event.preventDefault();
-
-                        $.ajax({
-                            url: '/search',
-                            method: 'GET',
-                            data: $searchForm.serialize(),
+        $(document).ready(
+            function() {
+                var $resultTable = $('#search-result'),
+                    $resultTableBody = $resultTable.find('tbody'),
+                    $searchForm = $('#search-form'),
+                    $inputStartWith = $('#start-with'),
+                    $searchQuery = $('#search-query'),
+                    $postForm = $('#post-form'),
+                    $postResult = $('#post-result'),
+                    $postResultTableBody = $postResult.find('table tbody'),
+                    $links = $('#links'),
+                    $btnStartWith = $('.btn-start-with'),
+                    crawlingLink = 0,
+                    goodImportIcon = '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-bookmark-check-fill" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M2 15.5V2a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v13.5a.5.5 0 0 1-.74.439L8 13.069l-5.26 2.87A.5.5 0 0 1 2 15.5zm8.854-9.646a.5.5 0 0 0-.708-.708L7.5 7.793 6.354 6.646a.5.5 0 1 0-.708.708l1.5 1.5a.5.5 0 0 0 .708 0l3-3z"/></svg>',
+                    badImportIcon = '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-bookmark-x" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M6.146 5.146a.5.5 0 0 1 .708 0L8 6.293l1.146-1.147a.5.5 0 1 1 .708.708L8.707 7l1.147 1.146a.5.5 0 0 1-.708.708L8 7.707 6.854 8.854a.5.5 0 1 1-.708-.708L7.293 7 6.146 5.854a.5.5 0 0 1 0-.708z"/><path d="M2 2a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v13.5a.5.5 0 0 1-.777.416L8 13.101l-5.223 2.815A.5.5 0 0 1 2 15.5V2zm2-1a1 1 0 0 0-1 1v12.566l4.723-2.482a.5.5 0 0 1 .554 0L13 14.566V2a1 1 0 0 0-1-1H4z"/></svg>',
+                    updateTrToSuccess = function($this, data) {
+                        $this
+                            .find('td.item-loading').addClass('text-success').html(goodImportIcon).end()
+                            .find('td.item-name').text(data['title']).end()
+                            .find('td.item-size').text(humanFileSize(data['size'])).end()
+                    },
+                    submitLink = function($this, data) {
+                        return $.ajax({
+                            url: '/add',
+                            method: 'POST',
+                            data: JSON.stringify(data),
+                            processData: false,
+                            contentType: 'application/json',
+                            dataType: 'JSON',
                             headers: {
                                 'Authorization': 'Bearer {{ token }}',
                             },
@@ -360,66 +201,207 @@
                                     window.location.reload();
                                     return;
                                 }
-
-                                $resultTableBody.empty();
-                                $.each(response['items'], function(index, item) {
-                                    var countClass = '';
-                                    if (item['like_count'] < 0) {
-                                        countClass = 'text-danger';
-                                    } else if (item['like_count'] > 0) {
-                                        countClass = 'text-primary'
-                                    }
-
-                                    var name = $('<td />')
-                                        .append(
-                                            $('<div class="text-truncate" />').text(item['title']).attr('title', item['title'])
-                                        )
-                                        .append('<small><a href="'+ item['link'] +'" target="_blank">' + item['link'] + '</a></small>');
-
-
-                                    var $item = $('<tr data-link-id="' + item['id'] + '" />');
-                                    $item.append(name)
-                                    $item.append('<td class="item-loading"></td>');
-                                    $item.append($('<td>').text(humanFileSize(item['size'])))
-                                    $item.append('<td style="text-align: right">' +
-                                        '<div class="btn-group" role="group" aria-label="Basic mixed styles example">' +
-                                            '<button type="button" class="btn btn-sm text-danger btn-link-down">' +
-                                                '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-hand-thumbs-down" viewBox="0 0 16 16">' +
-                                                    '<path d="M8.864 15.674c-.956.24-1.843-.484-1.908-1.42-.072-1.05-.23-2.015-.428-2.59-.125-.36-.479-1.012-1.04-1.638-.557-.624-1.282-1.179-2.131-1.41C2.685 8.432 2 7.85 2 7V3c0-.845.682-1.464 1.448-1.546 1.07-.113 1.564-.415 2.068-.723l.048-.029c.272-.166.578-.349.97-.484C6.931.08 7.395 0 8 0h3.5c.937 0 1.599.478 1.934 1.064.164.287.254.607.254.913 0 .152-.023.312-.077.464.201.262.38.577.488.9.11.33.172.762.004 1.15.069.13.12.268.159.403.077.27.113.567.113.856 0 .289-.036.586-.113.856-.035.12-.08.244-.138.363.394.571.418 1.2.234 1.733-.206.592-.682 1.1-1.2 1.272-.847.283-1.803.276-2.516.211a9.877 9.877 0 0 1-.443-.05 9.364 9.364 0 0 1-.062 4.51c-.138.508-.55.848-1.012.964l-.261.065zM11.5 1H8c-.51 0-.863.068-1.14.163-.281.097-.506.229-.776.393l-.04.025c-.555.338-1.198.73-2.49.868-.333.035-.554.29-.554.55V7c0 .255.226.543.62.65 1.095.3 1.977.997 2.614 1.709.635.71 1.064 1.475 1.238 1.977.243.7.407 1.768.482 2.85.025.362.36.595.667.518l.262-.065c.16-.04.258-.144.288-.255a8.34 8.34 0 0 0-.145-4.726.5.5 0 0 1 .595-.643h.003l.014.004.058.013a8.912 8.912 0 0 0 1.036.157c.663.06 1.457.054 2.11-.163.175-.059.45-.301.57-.651.107-.308.087-.67-.266-1.021L12.793 7l.353-.354c.043-.042.105-.14.154-.315.048-.167.075-.37.075-.581 0-.211-.027-.414-.075-.581-.05-.174-.111-.273-.154-.315l-.353-.354.353-.354c.047-.047.109-.176.005-.488a2.224 2.224 0 0 0-.505-.804l-.353-.354.353-.354c.006-.005.041-.05.041-.17a.866.866 0 0 0-.121-.415C12.4 1.272 12.063 1 11.5 1z"/>' +
-                                                '</svg>' +
-                                            '</button>' +
-                                            '<div class="btn btn-sm disabled font-bold link-count '+ countClass + '">' + item['like_count'] + '</div>' +
-                                            '<button type="button" class="btn btn-sm text-primary btn-link-up">' +
-                                                '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-hand-thumbs-up" viewBox="0 0 16 16">' +
-                                                    '<path d="M8.864.046C7.908-.193 7.02.53 6.956 1.466c-.072 1.051-.23 2.016-.428 2.59-.125.36-.479 1.013-1.04 1.639-.557.623-1.282 1.178-2.131 1.41C2.685 7.288 2 7.87 2 8.72v4.001c0 .845.682 1.464 1.448 1.545 1.07.114 1.564.415 2.068.723l.048.03c.272.165.578.348.97.484.397.136.861.217 1.466.217h3.5c.937 0 1.599-.477 1.934-1.064a1.86 1.86 0 0 0 .254-.912c0-.152-.023-.312-.077-.464.201-.263.38-.578.488-.901.11-.33.172-.762.004-1.149.069-.13.12-.269.159-.403.077-.27.113-.568.113-.857 0-.288-.036-.585-.113-.856a2.144 2.144 0 0 0-.138-.362 1.9 1.9 0 0 0 .234-1.734c-.206-.592-.682-1.1-1.2-1.272-.847-.282-1.803-.276-2.516-.211a9.84 9.84 0 0 0-.443.05 9.365 9.365 0 0 0-.062-4.509A1.38 1.38 0 0 0 9.125.111L8.864.046zM11.5 14.721H8c-.51 0-.863-.069-1.14-.164-.281-.097-.506-.228-.776-.393l-.04-.024c-.555-.339-1.198-.731-2.49-.868-.333-.036-.554-.29-.554-.55V8.72c0-.254.226-.543.62-.65 1.095-.3 1.977-.996 2.614-1.708.635-.71 1.064-1.475 1.238-1.978.243-.7.407-1.768.482-2.85.025-.362.36-.594.667-.518l.262.066c.16.04.258.143.288.255a8.34 8.34 0 0 1-.145 4.725.5.5 0 0 0 .595.644l.003-.001.014-.003.058-.014a8.908 8.908 0 0 1 1.036-.157c.663-.06 1.457-.054 2.11.164.175.058.45.3.57.65.107.308.087.67-.266 1.022l-.353.353.353.354c.043.043.105.141.154.315.048.167.075.37.075.581 0 .212-.027.414-.075.582-.05.174-.111.272-.154.315l-.353.353.353.354c.047.047.109.177.005.488a2.224 2.224 0 0 1-.505.805l-.353.353.353.354c.006.005.041.05.041.17a.866.866 0 0 1-.121.416c-.165.288-.503.56-1.066.56z"/>' +
-                                                '</svg>' +
-                                            '</button>' +
-                                        '</div>' +
-                                    '</td>')
-                                    $item.data('link', item['link'])
-                                    $item.data('scraped', false)
-                                    $resultTableBody.append($item);
-                                });
+                                updateTrToSuccess($this, data)
                             }
-                        });
-                    }).trigger('submit');
+                        })
+                    },
+                    submitTemperature = function($tr, action) {
+                        $.ajax({
+                            url: '/like',
+                            method: 'POST',
+                            data: JSON.stringify({'id': parseInt($tr.data('link-id')), 'action': action}),
+                            processData: false,
+                            contentType: 'application/json',
+                            dataType: 'JSON',
+                            headers: {
+                                'Authorization': 'Bearer {{ token }}',
+                            },
+                            success: function(response) {
+                                if (response['status'] === 'unauthorized') {
+                                    window.location.reload();
+                                    return;
+                                }
+                                if (response['status'] !== 'ok') {
+                                    return;
+                                }
+                                $tr.find('.link-count').text(response['like_count']);
+                            }
+                        })
+                    },
+                    crawlLink = function($this, link, publish) {
+                        var token = getUpToBoxToken(link);
+                        $.ajax({
+                            method: 'POST',
+                            processData: false,
+                            url: 'https://uptobox.com/' + token,
+                            success: function(response) {
+                                var data = getUpToBoxData(token, response);
+                                if (!data['size']) {
+                                    $this.addClass('table-danger').find('.item-loading').html(badImportIcon);
+                                    return;
+                                }
+                                if (publish) {
+                                    submitLink($this, data)
+                                } else {
+                                    updateTrToSuccess($this, data)
+                                    submitTemperature($this, 'up')
+                                }
+                            },
+                            error: function() {
+                                $this.addClass('table-danger').find('td.item-loading').html(badImportIcon);
+                                if (!publish) {
+                                    submitTemperature($this, 'down')
+                                }
+                            },
+                            complete: function() {
+                                crawlingLink--;
+                            }
+                        })
+                    },
+                    updateTemperature = function(event, $this, action) {
+                        var $tr = $this.closest('tr');
 
-                    $btnStartWith.on('click', function(event) {
-                        var $this = $(this),
-                            startWith = $this.data('start-with');
+                        $tr.find('button').attr('disabled', 'disabled');
 
                         event.preventDefault();
+                        submitTemperature($tr, action)
+                    }
 
-                        $btnStartWith.removeClass('btn-secondary').addClass('btn-outline-secondary');
-                        $this.removeClass('btn-outline-secondary').addClass('btn-secondary');
-                        $inputStartWith.val(startWith);
+                $postResult.hide();
+                $postForm.on('submit', function(event) {
+                    event.preventDefault();
+
+                    var lines = $links.val().split("\n").filter(n => n.trim())
+                    if (!lines.length) {
+                        return
+                    }
+                    $postForm.hide();
+                    $postResult.show();
+                    $postResultTableBody.empty();
+                    $links.val('');
+
+                    $.each(lines, function(index, line) {
+                        var $item = $('<tr />');
+                        $item.append('<td class="item-loading"><div class="spinner-border spinner-border-sm" role="status"><span class="visually-hidden">Loading...</span></div></td>');
+                        $item.append('<th scope="row">' + index + '</th>');
+                        $item.append($('<td/>').text(line));
+                        $item.append('<td style="max-width: 100px" class="text-truncate item-name"></td>');
+                        $item.append('<td class="item-size"></td>');
+                        $postResultTableBody.append($item)
+
+                        crawlingLink++;
+                        setTimeout(
+                            function() {
+                                crawlLink($item, line, true);
+                            },
+                            index * 2000
+                        )
+                    })
+                    var interval = setInterval(function() {
+                        if (crawlingLink > 0) {
+                            return;
+                        }
+                        $postForm.show()
+                        $postResult.hide();
+                        clearInterval(interval);
+
+                        $searchQuery.val('');
                         $searchForm.trigger('submit');
+                    }, 2000)
+                })
+
+                $resultTable
+                    .on('click', '.btn-link-up', function(event) {
+                        updateTemperature(event, $(this), 'up');
+                    })
+                    .on('click', '.btn-link-down', function(event) {
+                        updateTemperature(event, $(this), 'down');
                     });
 
-                    $('#totalSize').html(humanFileSize({{ totalSize }} * 1000));
-                    $('#archiveSize').html(humanFileSize({{ archiveSize }}));
-                }
-            )
-        </script>
-    </body>
-</html>
+                $resultTableBody.on('mouseover', 'tr', function(event) {
+                    var $this = $(this);
+
+                    if ($this.data('scraped')) {
+                        return;
+                    }
+                    $this.data('scraped', true)
+                    $this.find('.item-loading').html('<div class="spinner-border spinner-border-sm" role="status"><span class="visually-hidden">Loading...</span></div>');
+                    crawlLink($this, $this.data('link'), false);
+                })
+                $searchForm.on('submit', function(event) {
+                    event.preventDefault();
+
+                    $.ajax({
+                        url: '/search',
+                        method: 'GET',
+                        data: $searchForm.serialize(),
+                        headers: {
+                            'Authorization': 'Bearer {{ token }}',
+                        },
+                        success: function(response) {
+                            if (response['status'] === 'unauthorized') {
+                                window.location.reload();
+                                return;
+                            }
+
+                            $resultTableBody.empty();
+                            $.each(response['items'], function(index, item) {
+                                var countClass = '';
+                                if (item['like_count'] < 0) {
+                                    countClass = 'text-danger';
+                                } else if (item['like_count'] > 0) {
+                                    countClass = 'text-primary'
+                                }
+
+                                var name = $('<td />')
+                                    .append(
+                                        $('<div class="text-truncate" />').text(item['title']).attr('title', item['title'])
+                                    )
+                                    .append('<small><a href="'+ item['link'] +'" target="_blank">' + item['link'] + '</a></small>');
+
+
+                                var $item = $('<tr data-link-id="' + item['id'] + '" />');
+                                $item.append(name)
+                                $item.append('<td class="item-loading"></td>');
+                                $item.append($('<td>').text(humanFileSize(item['size'])))
+                                $item.append('<td style="text-align: right">' +
+                                    '<div class="btn-group" role="group" aria-label="Basic mixed styles example">' +
+                                        '<button type="button" class="btn btn-sm text-danger btn-link-down">' +
+                                            '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-hand-thumbs-down" viewBox="0 0 16 16">' +
+                                                '<path d="M8.864 15.674c-.956.24-1.843-.484-1.908-1.42-.072-1.05-.23-2.015-.428-2.59-.125-.36-.479-1.012-1.04-1.638-.557-.624-1.282-1.179-2.131-1.41C2.685 8.432 2 7.85 2 7V3c0-.845.682-1.464 1.448-1.546 1.07-.113 1.564-.415 2.068-.723l.048-.029c.272-.166.578-.349.97-.484C6.931.08 7.395 0 8 0h3.5c.937 0 1.599.478 1.934 1.064.164.287.254.607.254.913 0 .152-.023.312-.077.464.201.262.38.577.488.9.11.33.172.762.004 1.15.069.13.12.268.159.403.077.27.113.567.113.856 0 .289-.036.586-.113.856-.035.12-.08.244-.138.363.394.571.418 1.2.234 1.733-.206.592-.682 1.1-1.2 1.272-.847.283-1.803.276-2.516.211a9.877 9.877 0 0 1-.443-.05 9.364 9.364 0 0 1-.062 4.51c-.138.508-.55.848-1.012.964l-.261.065zM11.5 1H8c-.51 0-.863.068-1.14.163-.281.097-.506.229-.776.393l-.04.025c-.555.338-1.198.73-2.49.868-.333.035-.554.29-.554.55V7c0 .255.226.543.62.65 1.095.3 1.977.997 2.614 1.709.635.71 1.064 1.475 1.238 1.977.243.7.407 1.768.482 2.85.025.362.36.595.667.518l.262-.065c.16-.04.258-.144.288-.255a8.34 8.34 0 0 0-.145-4.726.5.5 0 0 1 .595-.643h.003l.014.004.058.013a8.912 8.912 0 0 0 1.036.157c.663.06 1.457.054 2.11-.163.175-.059.45-.301.57-.651.107-.308.087-.67-.266-1.021L12.793 7l.353-.354c.043-.042.105-.14.154-.315.048-.167.075-.37.075-.581 0-.211-.027-.414-.075-.581-.05-.174-.111-.273-.154-.315l-.353-.354.353-.354c.047-.047.109-.176.005-.488a2.224 2.224 0 0 0-.505-.804l-.353-.354.353-.354c.006-.005.041-.05.041-.17a.866.866 0 0 0-.121-.415C12.4 1.272 12.063 1 11.5 1z"/>' +
+                                            '</svg>' +
+                                        '</button>' +
+                                        '<div class="btn btn-sm disabled font-bold link-count '+ countClass + '">' + item['like_count'] + '</div>' +
+                                        '<button type="button" class="btn btn-sm text-primary btn-link-up">' +
+                                            '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-hand-thumbs-up" viewBox="0 0 16 16">' +
+                                                '<path d="M8.864.046C7.908-.193 7.02.53 6.956 1.466c-.072 1.051-.23 2.016-.428 2.59-.125.36-.479 1.013-1.04 1.639-.557.623-1.282 1.178-2.131 1.41C2.685 7.288 2 7.87 2 8.72v4.001c0 .845.682 1.464 1.448 1.545 1.07.114 1.564.415 2.068.723l.048.03c.272.165.578.348.97.484.397.136.861.217 1.466.217h3.5c.937 0 1.599-.477 1.934-1.064a1.86 1.86 0 0 0 .254-.912c0-.152-.023-.312-.077-.464.201-.263.38-.578.488-.901.11-.33.172-.762.004-1.149.069-.13.12-.269.159-.403.077-.27.113-.568.113-.857 0-.288-.036-.585-.113-.856a2.144 2.144 0 0 0-.138-.362 1.9 1.9 0 0 0 .234-1.734c-.206-.592-.682-1.1-1.2-1.272-.847-.282-1.803-.276-2.516-.211a9.84 9.84 0 0 0-.443.05 9.365 9.365 0 0 0-.062-4.509A1.38 1.38 0 0 0 9.125.111L8.864.046zM11.5 14.721H8c-.51 0-.863-.069-1.14-.164-.281-.097-.506-.228-.776-.393l-.04-.024c-.555-.339-1.198-.731-2.49-.868-.333-.036-.554-.29-.554-.55V8.72c0-.254.226-.543.62-.65 1.095-.3 1.977-.996 2.614-1.708.635-.71 1.064-1.475 1.238-1.978.243-.7.407-1.768.482-2.85.025-.362.36-.594.667-.518l.262.066c.16.04.258.143.288.255a8.34 8.34 0 0 1-.145 4.725.5.5 0 0 0 .595.644l.003-.001.014-.003.058-.014a8.908 8.908 0 0 1 1.036-.157c.663-.06 1.457-.054 2.11.164.175.058.45.3.57.65.107.308.087.67-.266 1.022l-.353.353.353.354c.043.043.105.141.154.315.048.167.075.37.075.581 0 .212-.027.414-.075.582-.05.174-.111.272-.154.315l-.353.353.353.354c.047.047.109.177.005.488a2.224 2.224 0 0 1-.505.805l-.353.353.353.354c.006.005.041.05.041.17a.866.866 0 0 1-.121.416c-.165.288-.503.56-1.066.56z"/>' +
+                                            '</svg>' +
+                                        '</button>' +
+                                    '</div>' +
+                                '</td>')
+                                $item.data('link', item['link'])
+                                $item.data('scraped', false)
+                                $resultTableBody.append($item);
+                            });
+                        }
+                    });
+                }).trigger('submit');
+
+                $btnStartWith.on('click', function(event) {
+                    var $this = $(this),
+                        startWith = $this.data('start-with');
+
+                    event.preventDefault();
+
+                    $btnStartWith.removeClass('btn-secondary').addClass('btn-outline-secondary');
+                    $this.removeClass('btn-outline-secondary').addClass('btn-secondary');
+                    $inputStartWith.val(startWith);
+                    $searchForm.trigger('submit');
+                });
+
+                $('#totalSize').html(humanFileSize({{ totalSize }} * 1000));
+                $('#archiveSize').html(humanFileSize({{ archiveSize }}));
+            }
+        )
+    </script>
+{% endblock %}

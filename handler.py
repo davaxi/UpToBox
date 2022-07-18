@@ -10,6 +10,12 @@ connection.connect()
 app = Flask(__name__)
 
 
+@app.route("/cgu", methods=['GET'])
+def cgu():
+    now = datetime.now()
+    return render_template('cgu.html', year=now.year)
+
+
 @app.route("/", methods=['GET'])
 def index():
     data = {'ping': 'pong'}
@@ -25,6 +31,7 @@ def index():
         stats = os.stat(tools.constant.ARCHIVE_PATH)
         archive_size = stats.st_size
 
+    now = datetime.now()
     return render_template(
         'index.html',
         token=tools.security.jwt_encode(data),
@@ -32,6 +39,7 @@ def index():
         totalSize=row['total'],
         archiveSize=archive_size,
         letters=letters,
+        year=now.year
     )
 
 
