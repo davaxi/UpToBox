@@ -30,7 +30,7 @@ services:
       - .:/app
       - .cache:/root/.cache
     env_file:
-      - .env-production
+      - .env
 
   web:
     networks:
@@ -45,7 +45,7 @@ services:
     volumes:
       - .:/app
     env_file:
-      - .env-local
+      - .env
     labels:
       - traefik.enable=true
       - traefik.http.services.web_uptobox_publisher.loadbalancer.server.port=80
